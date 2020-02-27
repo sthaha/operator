@@ -15,54 +15,55 @@ limitations under the License.
 */
 package common
 
-import (
-	mf "github.com/jcrossley3/manifestival"
-	v1alpha1 "github.com/tektoncd/operator/pkg/apis/operator/v1alpha1"
-	"k8s.io/apimachinery/pkg/runtime"
-	"sigs.k8s.io/controller-runtime/pkg/client"
-	logf "sigs.k8s.io/controller-runtime/pkg/runtime/log"
-)
-
-var log = logf.Log.WithName("common")
-
-// Activity is a interface, func Configure will be implemented by each Extension as a register. It will decide if
-// the Extension will be add to process chain.
-type Activity interface {
-	Configure(client.Client, *runtime.Scheme, *v1alpha1.ExtensionWapper) (*Extension, error)
-}
-
-// Activities is array of Activity
-type Activities []Activity
-
-// Extensions is array of Extension
-type Extensions []Extension
-
-// Extension is a plugin, could be remove/add easily
-type Extension struct {
-	Transformers []mf.Transformer
-}
-
-// Extend produce Extensions by invoke Activities
-func (activities Activities) Extend(c client.Client, scheme *runtime.Scheme, extensionWapper *v1alpha1.ExtensionWapper) (result Extensions, err error) {
-	for _, activity := range activities {
-		ext, err := activity.Configure(c, scheme, extensionWapper)
-		if err != nil {
-			return result, err
-		}
-		if ext != nil {
-			result = append(result, *ext)
-		}
-	}
-	return
-}
-
-// Transform do real work
-func (exts Extensions) Transform() []mf.Transformer {
-	result := []mf.Transformer{}
-
-	for _, extension := range exts {
-		result = append(result, extension.Transformers...)
-	}
-
-	return result
-}
+//
+//import (
+//	mf "github.com/jcrossley3/manifestival"
+//	v1alpha1 "github.com/tektoncd/operator/pkg/apis/operator/v1alpha1"
+//	"k8s.io/apimachinery/pkg/runtime"
+//	"sigs.k8s.io/controller-runtime/pkg/client"
+//	logf "sigs.k8s.io/controller-runtime/pkg/runtime/log"
+//)
+//
+//var log = logf.Log.WithName("common")
+//
+//// Activity is a interface, func Configure will be implemented by each Extension as a register. It will decide if
+//// the Extension will be add to process chain.
+//type Activity interface {
+//	Configure(client.Client, *runtime.Scheme, *v1alpha1.ExtensionWapper) (*Extension, error)
+//}
+//
+//// Activities is array of Activity
+//type Activities []Activity
+//
+//// Extensions is array of Extension
+//type Extensions []Extension
+//
+//// Extension is a plugin, could be remove/add easily
+//type Extension struct {
+//	Transformers []mf.Transformer
+//}
+//
+//// Extend produce Extensions by invoke Activities
+//func (activities Activities) Extend(c client.Client, scheme *runtime.Scheme, extensionWapper *v1alpha1.ExtensionWapper) (result Extensions, err error) {
+//	for _, activity := range activities {
+//		ext, err := activity.Configure(c, scheme, extensionWapper)
+//		if err != nil {
+//			return result, err
+//		}
+//		if ext != nil {
+//			result = append(result, *ext)
+//		}
+//	}
+//	return
+//}
+//
+//// Transform do real work
+//func (exts Extensions) Transform() []mf.Transformer {
+//	result := []mf.Transformer{}
+//
+//	for _, extension := range exts {
+//		result = append(result, extension.Transformers...)
+//	}
+//
+//	return result
+//}

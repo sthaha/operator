@@ -15,11 +15,11 @@ limitations under the License.
 */
 package config
 
-import (
-	ir "github.com/tektoncd/operator/pkg/controller/extensions/imagereplacement"
-)
+//import (
+//ir "github.com/tektoncd/operator/pkg/controller/extensions/imagereplacement"
+//)
 
-func init() {
-	imageReplacement, _ := ir.New()
-	activities = append(activities, imageReplacement)
-}
+//func init() {
+//imageReplacement, _ := ir.New()
+//activities = append(activities, imageReplacement)
+//}

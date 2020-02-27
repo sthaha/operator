@@ -15,11 +15,7 @@ limitations under the License.
 */
 package addon
 
-import (
-	ir "github.com/tektoncd/operator/pkg/controller/extensions/imagereplacement"
-)
-
-func init() {
-	imageReplacement, _ := ir.New()
-	activities = append(activities, imageReplacement)
-}
+//func init() {
+//imageReplacement, _ := ir.New()
+//activities = append(activities, imageReplacement)
+//}

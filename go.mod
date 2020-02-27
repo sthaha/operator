@@ -3,6 +3,7 @@ module github.com/tektoncd/operator
 require (
 	github.com/coreos/prometheus-operator v0.31.1 // indirect
 	github.com/go-logr/logr v0.1.0
+	github.com/google/martian v2.1.0+incompatible
 	github.com/jcrossley3/manifestival v0.0.0-20190621184852-78b6b04ae6ff
 	github.com/operator-framework/operator-sdk v0.10.1
 	github.com/prometheus/common v0.2.0

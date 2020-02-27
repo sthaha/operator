@@ -10,7 +10,6 @@ import (
 	"github.com/operator-framework/operator-sdk/pkg/predicate"
 	"github.com/prometheus/common/log"
 	op "github.com/tektoncd/operator/pkg/apis/operator/v1alpha1"
-	"github.com/tektoncd/operator/pkg/controller/common"
 	"github.com/tektoncd/operator/pkg/controller/setup"
 	appsv1 "k8s.io/api/apps/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -34,7 +33,7 @@ var (
 	noAutoInstall   bool
 	recursive       bool
 	ctrlLog         = logf.Log.WithName("ctrl").WithName("config")
-	activities      common.Activities
+	//activities      common.Activities
 )
 
 func init() {
@@ -200,14 +199,14 @@ func (r *ReconcileConfig) reconcileInstall(req reconcile.Request, res *op.Config
 		mf.InjectNamespace(res.Spec.TargetNamespace),
 	}
 
-	var extensionWrapper *op.ExtensionWapper
-	extensionWrapper = res.Spec.ConvertExtensionwapper()
-	extensions, err := activities.Extend(r.client, r.scheme, extensionWrapper)
-	if err != nil {
-		return reconcile.Result{}, err
-	}
+	//var extensionWrapper *op.ExtensionWapper
+	//extensionWrapper = res.Spec.ConvertExtensionwapper()
+	//extensions, err := activities.Extend(r.client, r.scheme, extensionWrapper)
+	//if err != nil {
+	//return reconcile.Result{}, err
+	//}
 
-	tfs = append(tfs, extensions.Transform()...)
+	//tfs = append(tfs, extensions.Transform()...)
 	err = r.manifest.Transform(tfs...)
 	if err == nil {
 		err = r.manifest.ApplyAll()

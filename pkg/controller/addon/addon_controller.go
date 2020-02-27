@@ -10,7 +10,6 @@ import (
 	mf "github.com/jcrossley3/manifestival"
 	"github.com/prometheus/common/log"
 	op "github.com/tektoncd/operator/pkg/apis/operator/v1alpha1"
-	"github.com/tektoncd/operator/pkg/controller/common"
 	"github.com/tektoncd/operator/pkg/controller/setup"
 	"golang.org/x/xerrors"
 	appsv1 "k8s.io/api/apps/v1"
@@ -31,7 +30,6 @@ var (
 	ctrlLog                   = logf.Log.WithName("ctrl").WithName("addon")
 	errPipelineNotReady       = xerrors.Errorf("tekton-pipelines not ready")
 	errAddonVersionUnresolved = xerrors.Errorf("could not resolve to a valid addon version")
-	activities                common.Activities
 )
 
 // Add creates a new Addon Controller and adds it to the Manager. The Manager will set fields on the Controller
@@ -249,14 +247,7 @@ func (r *ReconcileAddon) processPayload(res *op.Addon, targetNS string) (*mf.Man
 		mf.InjectNamespace(targetNS),
 	}
 
-	var extensionWrapper *op.ExtensionWapper
-	extensionWrapper = res.Spec.ConvertExtensionwapper()
-	extensions, err := activities.Extend(r.client, r.scheme, extensionWrapper)
-	if err != nil {
-		return nil, err
-	}
-
-	tfs = append(tfs, extensions.Transform()...)
+	tfs = append(tfs, res.Transformers(r.scheme)...)
 	if err := manifest.Transform(tfs...); err != nil {
 		return nil, err
 	}

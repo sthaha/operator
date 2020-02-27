@@ -14,7 +14,7 @@ type ConfigSpec struct {
 	// Add custom validation using kubebuilder tags: https://book.kubebuilder.io/beyond_basics/generating_crd.html
 	// ExtensionWapper containes attribute Extension used
 	// +optional
-	ExtensionWapper `json:",inline"`
+	//ExtensionWapper `json:",inline"`
 }
 
 // ConfigStatus defines the observed state of Config
@@ -85,8 +85,8 @@ func init() {
 	SchemeBuilder.Register(&Config{}, &ConfigList{})
 }
 
-func (configSpec ConfigSpec) ConvertExtensionwapper() *ExtensionWapper {
-	return &ExtensionWapper{
-		Registry: configSpec.Registry,
-	}
-}
+//func (configSpec ConfigSpec) ConvertExtensionwapper() *ExtensionWapper {
+//return &ExtensionWapper{
+//Registry: configSpec.Registry,
+//}
+//}

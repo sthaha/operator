@@ -1,19 +1,16 @@
 package v1alpha1
 
 import (
+	mf "github.com/jcrossley3/manifestival"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	runtime "k8s.io/apimachinery/pkg/runtime"
 )
 
 // AddonSpec defines the desired state of Addon
 // +k8s:openapi-gen=true
 type AddonSpec struct {
 	Version string `json:"version"`
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "operator-sdk generate k8s" to regenerate code after modifying this file
-	// Add custom validation using kubebuilder tags: https://book.kubebuilder.io/beyond_basics/generating_crd.html
-	// ExtensionWapper containes attribute Extension used
-	// +optional
-	ExtensionWapper `json:",inline"`
+	//Registry *RegistryExtension `json:"registry,omitempty"`
 }
 
 // AddonStatus defines the observed state of Addon
@@ -66,8 +63,18 @@ func init() {
 	SchemeBuilder.Register(&Addon{}, &AddonList{})
 }
 
-func (addonSpec AddonSpec) ConvertExtensionwapper() *ExtensionWapper {
-	return &ExtensionWapper{
-		Registry: addonSpec.Registry,
+func (a *Addon) Transformers(scheme *runtime.Scheme) []mf.Transformer {
+	tfs := []mf.Transformer{}
+	for _, extn := range a.Spec.Extensions() {
+		tfs = append(tfs, extn.Transformer(scheme))
 	}
+	return tfs
+}
+
+func (spec *AddonSpec) Extensions() []Extension {
+	res := []Extension{}
+	//if spec.Registry != nil {
+	//res = append(res, spec.Registry)
+	//}
+	return res
 }
