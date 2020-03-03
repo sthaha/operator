@@ -1,16 +1,14 @@
 package v1alpha1
 
 import (
-	mf "github.com/jcrossley3/manifestival"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	runtime "k8s.io/apimachinery/pkg/runtime"
 )
 
 // AddonSpec defines the desired state of Addon
 // +k8s:openapi-gen=true
 type AddonSpec struct {
-	Version string `json:"version"`
-	//Registry *RegistryExtension `json:"registry,omitempty"`
+	Version  string             `json:"version"`
+	Registry *RegistryExtension `json:"registry,omitempty"`
 }
 
 // AddonStatus defines the observed state of Addon
@@ -63,18 +61,8 @@ func init() {
 	SchemeBuilder.Register(&Addon{}, &AddonList{})
 }
 
-func (a *Addon) Transformers(scheme *runtime.Scheme) []mf.Transformer {
-	tfs := []mf.Transformer{}
-	for _, extn := range a.Spec.Extensions() {
-		tfs = append(tfs, extn.Transformer(scheme))
-	}
-	return tfs
-}
-
-func (spec *AddonSpec) Extensions() []Extension {
-	res := []Extension{}
-	//if spec.Registry != nil {
-	//res = append(res, spec.Registry)
-	//}
-	return res
+func (spec AddonSpec) Extensions() Extensions {
+	extns := Extensions{}
+	extns.Register(spec.Registry)
+	return extns
 }

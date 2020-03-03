@@ -247,7 +247,9 @@ func (r *ReconcileAddon) processPayload(res *op.Addon, targetNS string) (*mf.Man
 		mf.InjectNamespace(targetNS),
 	}
 
-	tfs = append(tfs, res.Transformers(r.scheme)...)
+	tfs = append(tfs, res.Spec.Extensions().Transformers(r.scheme)...)
+
+	//tfs = append(tfs, v1alpha1.Transformers(res.Spec, r.scheme)...)
 	if err := manifest.Transform(tfs...); err != nil {
 		return nil, err
 	}

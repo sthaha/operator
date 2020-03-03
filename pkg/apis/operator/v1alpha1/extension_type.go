@@ -16,6 +16,39 @@ type Extension interface {
 	Transformer(s *runtime.Scheme) mf.Transformer
 }
 
+type Extensions []Extension
+
+func (e Extensions) Register(extn Extension) {
+	panic("foobar")
+	log.Info("register", "extension", extn)
+	if extn == nil {
+		return
+	}
+	e = append(e, extn)
+	log.Info("registered", "extension", extn)
+}
+
+func (e Extensions) Transformers(scheme *runtime.Scheme) []mf.Transformer {
+	tfs := []mf.Transformer{}
+	for _, extn := range e {
+		tfs = append(tfs, extn.Transformer(scheme))
+	}
+	return tfs
+}
+
+type Extendable interface {
+	Extensions() Extensions
+}
+
+// Transformers foobar
+func Transformers(e Extendable, scheme *runtime.Scheme) []mf.Transformer {
+	tfs := []mf.Transformer{}
+	for _, extn := range e.Extensions() {
+		tfs = append(tfs, extn.Transformer(scheme))
+	}
+	return tfs
+}
+
 // RegistryExtension defines image overrides of tekton images.
 // The override values are specific to each tekton deployment.
 // +kxx8s:openapi-gen=true
@@ -26,6 +59,7 @@ type RegistryExtension struct {
 }
 
 func (r *RegistryExtension) Transformer(scheme *runtime.Scheme) mf.Transformer {
+	log.Info("ffffffffffffff")
 	return func(u *unstructured.Unstructured) error {
 		if u.GetKind() != "Deployment" {
 			return nil

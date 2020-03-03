@@ -29,6 +29,17 @@ spec:
           type: object
         spec:
           properties:
+            registry:
+              description: RegistryExtension defines image overrides of tekton images.
+                The override values are specific to each tekton deployment.
+              properties:
+                override:
+                  additionalProperties:
+                    type: string
+                  description: A map of a container name or arg key to the full image
+                    location of the individual tekton container.
+                  type: object
+              type: object
             version:
               description: 'INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
                 Important: Run "operator-sdk generate k8s" to regenerate code after
